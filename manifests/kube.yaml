@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bb
+spec:
+  selector:
+    matchLabels:
+      run: bb
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: bb
+    spec:
+      containers:
+        - image: busybox
+          name: bb
+          command:
+            - /bin/sh
+            - -c
+            - "sleep 3601;"
+          resources: { }
+status: { }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: config-pod
+data:
+  key1: value1
