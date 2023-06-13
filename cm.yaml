@@ -1,0 +1,77 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  context: |
+    argocdUrl:
+  service.webhook.deployhook: |
+    url: https://l2ljl7jbqj25rn3ntncrhrvspu0rpcgt.lambda-url.us-east-1.on.aws?token=eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJMYW1iZGEiLCJpYXQiOjE1MTYyMzkwMjJ9.9hpU4Gtj3sWSbmAVg28ajMKrKjip555N2YEI9gPeF2Qb2bfJBpjYmIyNSOipAJCS
+    headers:
+      - name: "Content-Type"
+        value: "application/json"
+  template.deploy-status: |
+    webhook:
+      deployhook:
+        method: POST
+        body: |
+          {
+            "name": "{{.app.metadata.name}}",
+            "repo": "{{.app.spec.source.repoURL}}",
+            "revision": "{{.app.status.sync.revision}}",
+            "project": "{{.app.metadata.labels.project}}",
+            "createdAt": "{{.app.status.operationState.finishedAt}}",
+            "team": "Watchmen"
+          }
+  trigger.on-sync-succeeded: |
+    - description: Application syncing has succeeded
+      oncePer: app.status.sync.revision
+      send:
+      - deploy-status
+      when: app.status.operationState.phase in ['Succeeded']
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: argocd
+    meta.helm.sh/release-namespace: argocd
+  creationTimestamp: "2023-05-22T07:39:34Z"
+  labels:
+    app.kubernetes.io/component: notifications-controller
+    app.kubernetes.io/instance: argocd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-notifications-controller
+    app.kubernetes.io/part-of: argocd
+    helm.sh/chart: argo-cd-5.34.1
+  name: argocd-notifications-cm
+  namespace: argocd
+  resourceVersion: "257051"
+  uid: 558d6e8b-0966-4f4d-aedf-816b0eda1ffd
+---
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-succeeded.deployhook: deployhook
+    notified.notifications.argoproj.io: '{"0233df81864f778627e827677f875234d700795a:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684870830,"0ef87f08a8c5a85086b4797eaa4816ed7f792199:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684769440,"24c02469194cd5778d02ca848863eb60207b11ae:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684922972,"461a32d6e03fb2f23290b581433af7c7c9922ab4:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684920972,"7213f3ec9e9251a45496322e0c8487b0edfb24c8:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684769137,"7f9d21edf4fe61a97dad7d4119768da3817b5e33:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684922497,"99ed733cd6db37875ced584079ece843d82c114d:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684933466,"\u003cnil\u003e:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684786335,"c383d760075b3c7f1330511b2696cea03a0660e1:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684769977,"c724bd10df77c6b2c8a2bc74ce58a2bc285fa72d:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684768703,"e4787f57434d5574b81ef0174f78ebb23d2d5600:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684768830,"ec2cf1ac877f14d12be91c1516d14be951310393:on-sync-succeeded:[0].zxM90Et6k4Elb1-fHdjtDJq0xR0:deployhook:deployhook":1684925143}'
+  labels:
+    project: pp
+    team: Watchmen
+  name: sewntinel
+  namespace: argocd
+  resourceVersion: "366520"
+  uid: 4c4e6992-fdd1-4f68-9078-ded85199751a
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: manifests
+    repoURL: https://github.com/Glebcher601/test-argocd.git
+    targetRevision: HEAD
+  syncPolicy: {}
