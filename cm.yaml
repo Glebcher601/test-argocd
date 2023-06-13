@@ -34,7 +34,7 @@ kind: ConfigMap
 metadata:
   annotations:
     meta.helm.sh/release-name: argocd
-    meta.helm.sh/release-namespace: argocd78
+    meta.helm.sh/release-namespace: argocd7
   creationTimestamp: "2023-05-22T07:39:34Z"
   labels:
     app.kubernetes.io/component: notifications-controller
