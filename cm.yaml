@@ -75,3 +75,4 @@ spec:
     repoURL: https://github.com/Glebcher601/test-argocd.git
     targetRevision: HEAD
   syncPolicy: {}
+#app.status.operationState.phase in ['Succeeded'] &&
