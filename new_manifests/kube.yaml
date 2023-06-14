@@ -18,5 +18,5 @@ spec:
           command:
             - /bin/sh
             - -c
-            - "sleep 3601;"
+            - "sleep 3604;"
           resources: { }
