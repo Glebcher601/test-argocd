@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aa
+spec:
+  selector:
+    matchLabels:
+      run: aa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: aa
+    spec:
+      containers:
+        - image: busybox
+          name: aa
+          command:
+            - /bin/sh
+            - -c
+            - "sleep 3601;"
+          resources: { }
