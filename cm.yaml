@@ -33,8 +33,8 @@ data:
 kind: ConfigMap
 metadata:
   annotations:
-    meta.helm.sh/release-name: argocd2445
-    meta.helm.sh/release-namespace: argocd56
+    meta.helm.sh/release-name: argocd24
+    meta.helm.sh/release-namespace: argocd5
   creationTimestamp: "2023-05-22T07:39:34Z"
   labels:
     app.kubernetes.io/component: notifications-controller
@@ -75,4 +75,3 @@ spec:
     repoURL: https://github.com/Glebcher601/test-argocd.git
     targetRevision: HEAD
   syncPolicy: {}
-#app.status.operationState.phase in ['Succeeded'] &&
