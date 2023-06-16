@@ -20,10 +20,3 @@ spec:
             - -c
             - "sleep 3604;"
           resources: { }
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: new-config-pod
-data:
-  key1: value1
