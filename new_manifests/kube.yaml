@@ -27,10 +27,3 @@ metadata:
   name: new-config-pod
 data:
   key1: value1
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: new-config-pod2
-data:
-  key1: value1
