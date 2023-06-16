@@ -33,7 +33,7 @@ data:
 kind: ConfigMap
 metadata:
   annotations:
-    meta.helm.sh/release-name: argocd
+    meta.helm.sh/release-name: argocddwda
     meta.helm.sh/release-namespace: argocd1fg
   creationTimestamp: "2023-05-22T07:39:34Z"
   labels:
