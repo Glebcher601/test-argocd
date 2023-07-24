@@ -38,6 +38,7 @@ pipeline {
                     def changeLogSets = currentBuild.changeSets
                     echo("changeSets=" + changeLogSets)
                     def changedFiles = getChangedFiles(currentBuild.changeSets)
+                    echo("${[["1", "2"], ["3", "4"]].collectMany { it }}")
                     echo("${changedFiles}")
                 }
             }
