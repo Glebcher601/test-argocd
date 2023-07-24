@@ -23,11 +23,13 @@ pipeline {
             }
             steps {
                 echo 'Building tag release...'
-                def pattern = /release\/(?<env>qa|stage|prod)\/.*/
-                def matcher = (env.TAG_NAME =~ pattern)
-                matcher.matches()
-                def env = env.group("env")
-                echo "Releasing on env $env"
+                script {
+                    def pattern = /release\/(?<env>qa|stage|prod)\/.*/
+                    def matcher = (env.TAG_NAME =~ pattern)
+                    matcher.matches()
+                    def env = env.group("env")
+                    echo "Releasing on env $env"
+                }
             }
         }
     }
