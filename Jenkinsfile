@@ -1,3 +1,5 @@
+import java.util.stream.Collectors
+
 pipeline {
     agent any
     stages {
@@ -18,6 +20,7 @@ pipeline {
                 script {
                     def changeLogSets = currentBuild.changeSets
                     echo("changeSets=" + changeLogSets)
+                    echo([["1", "2"], ["3", "4"]].stream().flatMap { it.stream()}.collect(Collectors.toList()))
                     for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
                         for (int j = 0; j < entries.length; j++) {
