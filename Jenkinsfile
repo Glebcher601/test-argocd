@@ -1,5 +1,22 @@
 import java.util.stream.Collectors
 
+def getChangedFiles(changeSet) {
+    def result = []
+    for (int i = 0; i < changeSet.size(); i++) {
+        def entries = changeSet[i].items
+        for (int j = 0; j < entries.length; j++) {
+            def entry = entries[j]
+            def files = new ArrayList(entry.affectedFiles)
+            for (int k = 0; k < files.size(); k++) {
+                def file = files[k]
+                result += file
+            }
+        }
+    }
+
+    return file
+}
+
 pipeline {
     agent any
     stages {
@@ -20,19 +37,8 @@ pipeline {
                 script {
                     def changeLogSets = currentBuild.changeSets
                     echo("changeSets=" + changeLogSets)
-                    echo([["1", "2"], ["3", "4"]].stream().flatMap { it.stream()}.collect(Collectors.toList()))
-                    for (int i = 0; i < changeLogSets.size(); i++) {
-                        def entries = changeLogSets[i].items
-                        for (int j = 0; j < entries.length; j++) {
-                            def entry = entries[j]
-                            echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
-                            def files = new ArrayList(entry.affectedFiles)
-                            for (int k = 0; k < files.size(); k++) {
-                                def file = files[k]
-                                echo " ${file.editType.name} ${file.path}"
-                            }
-                        }
-                    }
+                    def changedFiles = getChangedFiles(currentBuild.changeSets)
+                    echo("${changedFiles}")
                 }
             }
         }
