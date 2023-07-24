@@ -14,7 +14,7 @@ def getChangedFiles(changeSet) {
         }
     }
 
-    return file
+    return result
 }
 
 pipeline {
