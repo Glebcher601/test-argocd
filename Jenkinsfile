@@ -24,13 +24,14 @@ pipeline {
                     def pathPattern = /(?<env>dev|sandbox|qa|stage|prod)\/(?<path>.*)\/.*/
                     def changedFiles = getChangedFiles(currentBuild.changeSets)
                     changedFiles.each { file -> echo "${file.getPath()}" }
-                    changedFiles.collect {
+                    def shortened = changedFiles.collect {
                         def matcher = it.getPath() =~ pathPattern
                         if (matcher.matches()) {
                             return matcher.group("path")
                         }
                         return ""
                     }.findAll { it != "" }
+                    echo "Shortened: ${shortened}"
                     definedEnvs.each { definedEnv ->
                         if(changedFiles.any { it.getPath().startsWith(definedEnv) }) {
                             echo "Generating plan for $definedEnv"
