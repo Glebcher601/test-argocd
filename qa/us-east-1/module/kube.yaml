@@ -18,7 +18,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - "sleep 360325;"
+            - "sleep 36035;"
           resources: { }
 ---
 kind: ConfigMap
