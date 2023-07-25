@@ -22,7 +22,7 @@ pipeline {
                 echo 'Building Main branch...'
                 script {
                     def changedFiles = getChangedFiles(currentBuild.changeSets)
-                    changedFiles.each { file -> echo "$file.getPath()" }
+                    changedFiles.each { file -> echo "${file.getPath()}" }
                     definedEnvs.each { definedEnv ->
                         if(changedFiles.any { it.getPath().startsWith(definedEnv) }) {
                             echo "Generating plan for $definedEnv"
