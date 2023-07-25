@@ -52,9 +52,9 @@ pipeline {
 //                }
                 script {
                     def pattern = /release\/(?<env>qa|stage|prod)\/.*/
-                    def matcher = ("release/qa/1.3" =~ pattern)
-                    matcher.matches()
-                    def envResult = matcher.group("env")
+                    def envResult = ("release/qa/1.3" =~ pattern)
+                            .tap { it.matches()}
+                            .group("env")
                     echo "Releasing on env $envResult"
                     dir("dev") {
                         sh "ls"
