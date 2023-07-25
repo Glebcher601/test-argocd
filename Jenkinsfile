@@ -20,34 +20,44 @@ pipeline {
             }
             steps {
                 echo 'Building Main branch...'
+//                script {
+//                    def pathPattern = /(?<env>dev|sandbox|qa|stage|prod)\/(?<path>.*)\/.*/
+//                    def groupedPaths = getChangedFiles(currentBuild.changeSets).groupBy {
+//                        def matcher = it.getPath() =~ pathPattern
+//                        if (matcher.matches()) {
+//                            return matcher.group("env")
+//                        }
+//                        return "unknown"
+//                    }.collectEntries {
+//                        def envPathValues = it.value.collect {
+//                            def matcher = it.getPath() =~ pathPattern
+//                            if (matcher.matches()) {
+//                                return matcher.group("path")
+//                            }
+//                            return ""
+//                        }.findAll { it != "" }
+//                        [(it.key): envPathValues]
+//                    }
+//                    echo "GroupedFiltered: ${groupedPaths}"
+//                    definedEnvs.each { definedEnv ->
+//                        if(groupedPaths.containsKey(definedEnv)) {
+//                            echo "Generating plan for $definedEnv"
+//                            def includeDirs = groupedPaths[definedEnv].collect { "--terragrunt-include-dir ${it}"}.join(" ")
+//                            echo "IncludeDirs $includeDirs"
+//                            dir(definedEnv) {
+//                                sh "terragrunt plan $includeDirs --terragrunt-non-interactive -out=${definedEnv}.tfplan"
+//                            }
+//                        }
+//                    }
+//                }
                 script {
-                    def pathPattern = /(?<env>dev|sandbox|qa|stage|prod)\/(?<path>.*)\/.*/
-                    def groupedPaths = getChangedFiles(currentBuild.changeSets).groupBy {
-                        def matcher = it.getPath() =~ pathPattern
-                        if (matcher.matches()) {
-                            return matcher.group("env")
-                        }
-                        return "unknown"
-                    }.collectEntries {
-                        def envPathValues = it.value.collect {
-                            def matcher = it.getPath() =~ pathPattern
-                            if (matcher.matches()) {
-                                return matcher.group("path")
-                            }
-                            return ""
-                        }.findAll { it != "" }
-                        [(it.key): envPathValues]
-                    }
-                    echo "GroupedFiltered: ${groupedPaths}"
-                    definedEnvs.each { definedEnv ->
-                        if(groupedPaths.containsKey(definedEnv)) {
-                            echo "Generating plan for $definedEnv"
-                            def includeDirs = groupedPaths[definedEnv].collect { "--terragrunt-include-dir ${it}"}.join(" ")
-                            echo "IncludeDirs $includeDirs"
-                            dir(definedEnv) {
-                                sh "terragrunt plan $includeDirs --terragrunt-non-interactive -out=${definedEnv}.tfplan"
-                            }
-                        }
+                    def pattern = /release\/(?<env>qa|stage|prod)\/.*/
+                    def matcher = ("release/qa/1.3" =~ pattern)
+                    matcher.matches()
+                    def envResult = matcher.group("env")
+                    echo "Releasing on env $envResult"
+                    dir("dev") {
+                        sh "ls"
                     }
                 }
             }
