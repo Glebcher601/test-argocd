@@ -1,7 +1,7 @@
 def getChangedFiles(changeSets) {
     return changeSets.collectMany { it.items.collectMany { item -> item.affectedFiles } }
 }
-def definedEnvs = ['dev', 'sandbox', 'qa', 'staging', 'prod']
+def definedEnvs = ['dev', 'sandbox', 'qa', 'stage', 'prod']
 
 pipeline {
     agent any
@@ -50,10 +50,9 @@ pipeline {
                         }.findAll { it != "" }
                         [(it.key): envPathValues]
                     }
-                    echo "Shortened: ${shortened}"
                     echo "GroupedFiltered: ${groupedPaths}"
                     definedEnvs.each { definedEnv ->
-                        if(changedFiles.any { it.getPath().startsWith(definedEnv) }) {
+                        if(groupedPaths.containsKey(definedEnv)) {
                             echo "Generating plan for $definedEnv"
                         }
                     }
