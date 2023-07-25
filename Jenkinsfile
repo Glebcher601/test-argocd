@@ -54,6 +54,10 @@ pipeline {
                     definedEnvs.each { definedEnv ->
                         if(groupedPaths.containsKey(definedEnv)) {
                             echo "Generating plan for $definedEnv"
+                            def includeDirs = groupedPaths[definedEnv].collect { "--terragrunt-include-dir ${it}"}.join(" ")
+                            dir(definedEnv) {
+                                sh "terragrunt plan $includeDirs --terragrunt-non-interactive -out=${definedEnv}.tfplan"
+                            }
                         }
                     }
                 }
