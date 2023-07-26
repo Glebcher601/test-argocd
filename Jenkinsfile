@@ -22,7 +22,7 @@ pipeline {
                             returnStdout: true
                     ).trim()
                     println "Local branch is ${local_branch}"
-                    def baseBranch = env.CHANGE_TARGET
+                    def base_ranch = env.CHANGE_TARGET
                     println "Base branch is ${base_branch}"
                     sh script: "git fetch origin --no-tags ${base_branch}", label: "Getting base branch"
                     def gitDiff = sh (
