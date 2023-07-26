@@ -7,8 +7,10 @@ pipeline {
     agent any
     stages {
         stage('Build PR') {
-            expression {
-                env.CHANGE_ID && env.BRANCH_NAME.startsWith("PR-")
+            when {
+                expression {
+                    env.CHANGE_ID && env.BRANCH_NAME.startsWith("PR-")
+                }
             }
             steps {
                 echo 'Building PR...'
