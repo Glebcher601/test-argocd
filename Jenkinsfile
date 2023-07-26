@@ -7,11 +7,35 @@ pipeline {
     agent any
     stages {
         stage('Build PR') {
-            when {
-                branch pattern: "feature.*", comparator: "REGEXP"
+            expression {
+                env.CHANGE_ID && env.BRANCH_NAME.startsWith("PR-")
             }
             steps {
                 echo 'Building PR...'
+                script {
+                    def local_branch = sh (
+                            script: "git rev-parse --abbrev-ref HEAD",
+                            label: "Getting current branch name",
+                            returnStdout: true
+                    ).trim()
+                    println "Local branch is ${local_branch}"
+
+                    def base_branch = 'master'
+                    // This is very naive.
+                    // In reality, you need a better way to find out what your base branch is.
+                    // One way is to have a file with a name of a base branch.
+                    // Another one is to invoke API, e.g. GitHub API, to find out base branch.
+                    // Use whatever works for you.
+                    println "Base branch is ${base_branch}"
+
+                    sh script: "git fetch origin --no-tags ${base_branch}", label: "Getting base branch"
+
+                    def git_diff = sh (
+                            script: "git diff --name-only origin/${base_branch}..${local_branch}",
+                            returnStdout: true
+                    ).trim()
+                    println "Git diff: $git_diff"
+                }
             }
         }
         stage('Build main') {
@@ -57,7 +81,7 @@ pipeline {
                     def envResult = matcher.group("env")
                     matcher = null
                     echo "Releasing on env $envResult"
-                    dir("dev") {
+                    dir(envResult) {
                         sh "ls"
                     }
                 }
