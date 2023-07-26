@@ -15,28 +15,38 @@ pipeline {
             steps {
                 echo 'Building PR...'
                 script {
+                    def pathPattern = /(?<env>dev|sandbox|qa|staging|prod)\/(?<path>.*)\/.*/
                     def local_branch = sh (
                             script: "git rev-parse --abbrev-ref HEAD",
                             label: "Getting current branch name",
                             returnStdout: true
                     ).trim()
                     println "Local branch is ${local_branch}"
-
                     def base_branch = 'main'
-                    // This is very naive.
-                    // In reality, you need a better way to find out what your base branch is.
-                    // One way is to have a file with a name of a base branch.
-                    // Another one is to invoke API, e.g. GitHub API, to find out base branch.
-                    // Use whatever works for you.
                     println "Base branch is ${base_branch}"
-
                     sh script: "git fetch origin --no-tags ${base_branch}", label: "Getting base branch"
-
-                    def git_diff = sh (
+                    def gitDiff = sh (
                             script: "git diff --name-only origin/${base_branch}..${local_branch}",
                             returnStdout: true
-                    ).trim()
-                    println "Git diff: $git_diff"
+                    ).trim().readLines()
+                    println "Git diff: $gitDiff"
+                    def groupedPaths = gitDiff.groupBy {
+                        def matcher = it.getPath() =~ pathPattern
+                        if (matcher.matches()) {
+                            return matcher.group("env")
+                        }
+                        return "unknown"
+                    }.collectEntries {
+                        def envPathValues = it.value.collect {
+                            def matcher = (it =~ pathPattern)
+                            if (matcher.matches()) {
+                                return matcher.group("path")
+                            }
+                            return ""
+                        }.findAll { it != "" }
+                        [(it.key): envPathValues]
+                    }
+                    println "Grouped: $groupedPaths"
                 }
             }
         }
