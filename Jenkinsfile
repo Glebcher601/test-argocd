@@ -31,7 +31,7 @@ pipeline {
                     ).trim().readLines()
                     println "Git diff: $gitDiff"
                     def groupedPaths = gitDiff.groupBy {
-                        def matcher = it.getPath() =~ pathPattern
+                        def matcher = (it =~ pathPattern)
                         if (matcher.matches()) {
                             return matcher.group("env")
                         }
