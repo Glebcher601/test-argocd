@@ -22,7 +22,7 @@ pipeline {
                     ).trim()
                     println "Local branch is ${local_branch}"
 
-                    def base_branch = 'master'
+                    def base_branch = 'main'
                     // This is very naive.
                     // In reality, you need a better way to find out what your base branch is.
                     // One way is to have a file with a name of a base branch.
