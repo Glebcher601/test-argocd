@@ -75,10 +75,11 @@ pipeline {
                 branch "main"
             }
             steps {
+                sh script: "ls -la", label: "Before"
                 echo 'Unstash Main branch...'
                 script {
                     unstash name: "artifact"
-                    sh "ls -la"
+                    sh script: "ls -la", label: "After"
                 }
             }
             post {
