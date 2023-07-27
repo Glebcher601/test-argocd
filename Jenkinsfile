@@ -64,6 +64,11 @@ pipeline {
                     stash name: "artifact", includes : "STSH*/package.txt"
                 }
             }
+            post {
+                always {
+                    cleanWs()
+                }
+            }
         }
         stage('Unstash main') {
             when {
