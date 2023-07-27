@@ -59,8 +59,8 @@ pipeline {
                 script {
                     def uuid1 = UUID.randomUUID()
                     def uuid2 = UUID.randomUUID()
-                    sh "mkdir STSH$uuid1 && echo $uuid1 > $uuid1/package.txt"
-                    sh "mkdir STSH$uuid2 && echo $uuid2 > $uuid2/package.txt"
+                    sh "mkdir STSH$uuid1 && echo $uuid1 > STSH$uuid1/package.txt"
+                    sh "mkdir STSH$uuid2 && echo $uuid2 > STSH$uuid2/package.txt"
                     stash name: "artifact", includes : "STSH*/package.txt"
                 }
             }
