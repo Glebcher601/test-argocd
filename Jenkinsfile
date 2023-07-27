@@ -73,6 +73,7 @@ pipeline {
                 echo 'Unstash Main branch...'
                 script {
                     unstash name: "artifact"
+                    sh "ls -la"
                 }
             }
         }
