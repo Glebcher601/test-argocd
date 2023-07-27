@@ -76,6 +76,9 @@ pipeline {
                     sh "ls -la"
                 }
             }
+            post {
+                cleanWs()
+            }
         }
         stage('Build release') {
             when {
