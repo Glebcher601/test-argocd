@@ -80,6 +80,7 @@ pipeline {
                 script {
                     unstash name: "artifact"
                     sh script: "ls -la", label: "After"
+                    sh script: "ls STSH* -la", label: "After"
                 }
             }
             post {
