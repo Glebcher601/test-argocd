@@ -77,7 +77,9 @@ pipeline {
                 }
             }
             post {
-                cleanWs()
+                always {
+                    cleanWs()
+                }
             }
         }
         stage('Build release') {
