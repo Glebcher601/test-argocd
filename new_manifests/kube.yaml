@@ -20,6 +20,9 @@ spec:
             - -c
             - "sleep 3604;"
           resources: { }
+        - image: nginx
+          name: bb
+          resources: { }
 ---
 kind: ConfigMap
 apiVersion: v1
