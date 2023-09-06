@@ -18,7 +18,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - "sleep 36089;"
+            - "sleep 36082;"
           resources: { }
 status: { }
 ---
