@@ -57,15 +57,35 @@ pipeline {
             steps {
                 echo 'Building Main branch...'
                 script {
-                    def pattern = /release\/(?<env>qa|stage|prod)\/.*/
-                    def matcher = ("release/qa/1.3" =~ pattern)
-                    matcher.matches()
-                    def envResult = matcher.group("env")
-                    matcher = null
-                    echo "Releasing on env $envResult"
-                    dir(envResult) {
-                        sh "ls"
-                    }
+                    def uuid1 = UUID.randomUUID()
+                    def uuid2 = UUID.randomUUID()
+                    sh "mkdir STSH$uuid1 && echo $uuid1 > STSH$uuid1/package.txt"
+                    sh "mkdir STSH$uuid2 && echo $uuid2 > STSH$uuid2/package.txt"
+                    stash name: "artifact", includes : "STSH*/package.txt"
+                }
+            }
+            post {
+                always {
+                    cleanWs()
+                }
+            }
+        }
+        stage('Unstash main') {
+            when {
+                branch "main"
+            }
+            steps {
+                sh script: "ls -la", label: "Before"
+                echo 'Unstash Main branch...'
+                script {
+                    unstash name: "artifact"
+                    sh script: "ls -la", label: "After"
+                    sh script: "ls STSH* -la", label: "After"
+                }
+            }
+            post {
+                always {
+                    cleanWs()
                 }
             }
         }
